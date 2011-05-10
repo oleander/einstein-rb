@@ -19,11 +19,8 @@ class Einstein
       {list[0].gsub(/"|:|\s+/, "") => list[1..-1].map { |item| item.gsub(/• /, "").strip }}
     end.inject({}) { |a, b| a.merge(b)}
     
-    if whenever == :today
-      data = data[days[days.keys[Date.today.wday]]] || []
-    else
-      data = data[days[whenever]] || []
-    end
+    whenever = days.keys[Date.today.wday] if whenever == :today
+    data = data[days[whenever]] || []    
     
     Container.new(data, whenever)
   end
