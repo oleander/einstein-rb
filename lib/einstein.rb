@@ -1,17 +1,24 @@
 # -*- encoding : utf-8 -*-
 require "rest-client"
 require "nokogiri"
+require "prowl"
+require "einstein/container"
+require "titleize"
 
 class Einstein
+  include EinsteinContainer
+  
   def self.method_missing(meth, *args, &blk)
     Einstein.new.send(meth, *args, &blk)
   end
   
   def menu_for(whenever)
-    content.css("td.bg_lunchmeny p").to_a[1..-2].map do |p| 
+    data = content.css("td.bg_lunchmeny p").to_a[1..-2].map do |p| 
       list = p.content.split("\r\n")
       {list[0].gsub(/"|:|\s+/, "") => list[1..-1].map { |item| item.gsub(/• /, "").strip }}
     end.inject({}) { |a, b| a.merge(b)}[days[whenever]] || []
+    
+    Container.new(data, whenever)
   end
   
   private
