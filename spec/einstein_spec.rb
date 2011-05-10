@@ -49,6 +49,7 @@ describe Einstein do
     
     it "should be possible to pass 'today'" do
       Einstein.menu_for(:today).should include(*@today)
+      EinsteinContainer::Container.should_receive(:new).with(@today, :tuesday)
       a_request(:get, "http://www.butlercatering.se/einstein.html").should have_been_made.once
     end
   end
