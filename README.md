@@ -6,13 +6,13 @@ Follow me on [Twitter](http://twitter.com/linusoleander) or [Github](https://git
 
 ## How to use
 
-### Today's meal
+### Today's menu
 
 ```` ruby
 Einstein.menu_for(:today)
 ````
 
-### Meal for any day
+### Menu for any day
 
 ```` ruby
 Einstein.menu_for(:monday)
