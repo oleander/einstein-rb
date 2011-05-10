@@ -4,6 +4,7 @@ require "nokogiri"
 require "prowl"
 require "einstein/container"
 require "titleize"
+require "date"
 
 class Einstein
   include EinsteinContainer
