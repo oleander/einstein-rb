@@ -3,6 +3,7 @@ require "spec_helper"
 
 describe Einstein do
   use_vcr_cassette "index"
+  
   before(:all) do
     @days = [:monday, :tuesday, :wednesday, :thursday, :friday]
     @api_key = "6576aa9fa3fc3e18aca8da9914a166b3"
@@ -53,7 +54,8 @@ describe Einstein do
     end
     
     it "should not push if #menu_for is empty" do
-      
+      Prowl.should_not_receive(:add)
+      Einstein.menu_for(:sunday).push_to(@api_key)
     end
   end
 end

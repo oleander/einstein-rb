@@ -11,7 +11,7 @@ module EinsteinContainer
         application:  "Einstein ",
         event:        " #{@whenever.to_s.titleize}'s menu",
         description:  self.join(", ")
-      })
+      }) unless self.empty?
     end
   end
 end
