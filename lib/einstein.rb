@@ -16,7 +16,13 @@ class Einstein
     data = content.css("td.bg_lunchmeny p").to_a[1..-2].map do |p| 
       list = p.content.split("\r\n")
       {list[0].gsub(/"|:|\s+/, "") => list[1..-1].map { |item| item.gsub(/• /, "").strip }}
-    end.inject({}) { |a, b| a.merge(b)}[days[whenever]] || []
+    end.inject({}) { |a, b| a.merge(b)}
+    
+    if whenever == :today
+      data = data[days[days.keys[Date.today.wday]]] || []
+    else
+      data = data[days[whenever]] || []
+    end
     
     Container.new(data, whenever)
   end
@@ -32,13 +38,13 @@ class Einstein
     
     def days
       @_days ||= {
+        sunday:    "Sön",
         monday:    "Mån",
         tuesday:   "Tis",
         wednesday: "Ons",
         thursday:  "Tors",
         friday:    "Fre",
-        saturday:  "Lör",
-        sunday:    "Sön"
+        saturday:  "Lör"
       }
     end
 end

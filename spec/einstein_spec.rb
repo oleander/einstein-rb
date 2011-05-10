@@ -12,6 +12,12 @@ describe Einstein do
       "Kabanoss med Gött mos, rostad lök och barbecuekräm", 
       "Räksallad med tillbehör"
     ]
+    
+    @today = [
+      "Stekt panerad torskfilé med räkor, ägg och dillsås", 
+      "Parmesanbakad fläskytterfilé med ljummen tomatsalsa", 
+      "Rostbiff med potatissallad"
+    ]
   end
   
   describe "#meny_for" do
@@ -38,6 +44,12 @@ describe Einstein do
           dish.should_not match(/<|>/)
         end
       end
+      a_request(:get, "http://www.butlercatering.se/einstein.html").should have_been_made.times(5)
+    end
+    
+    it "should be possible to pass 'today'" do
+      Einstein.menu_for(:today).should include(*@today)
+      a_request(:get, "http://www.butlercatering.se/einstein.html").should have_been_made.once
     end
   end
   
