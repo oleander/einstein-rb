@@ -1,4 +1,5 @@
 # -*- encoding : utf-8 -*-
+
 require "rest-client"
 require "nokogiri"
 require "prowl"
@@ -17,7 +18,7 @@ class Einstein
     data = content.css("td.bg_lunchmeny p").to_a[1..-2].map do |p| 
       list = p.content.split("\r\n")
       {list[0].gsub(/"|:|\s+/, "") => list[1..-1].map { |item| item.gsub(/• /, "").strip }}
-    end.inject({}) { |a, b| a.merge(b)}
+    end.inject({}) { |a, b| a.merge(b) }
     
     whenever = days.keys[Date.today.wday] if whenever == :today
     data = data[days[whenever]] || []    
