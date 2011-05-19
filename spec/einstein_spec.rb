@@ -8,15 +8,15 @@ describe Einstein do
     @days = [:monday, :tuesday, :wednesday, :thursday, :friday]
     @api_key = "6576aa9fa3fc3e18aca8da9914a166b3"
     @monday = [
-      "Ristad rostbiff med champinjoner, lök och örtsky", 
-      "Kabanoss med Gött mos, rostad lök och barbecuekräm", 
+      "Varmrökt laxfilé med dillmajonnäs och färskpotatis", 
+      "Biff Africana med banan, kokos, jordnötter och ris", 
       "Räksallad med tillbehör"
     ]
     
     @today = [
-      "Stekt panerad torskfilé med räkor, ägg och dillsås", 
-      "Parmesanbakad fläskytterfilé med ljummen tomatsalsa", 
-      "Rostbiff med potatissallad"
+      "Stekt smörfisk med saffransdoftande skaldjursris & aioli", 
+      "Wokad kyckling med gröncurry, kokosmjölk och sweet chili", 
+      "Kräftsallad"
     ]
   end
   
@@ -50,6 +50,14 @@ describe Einstein do
     it "should be possible to pass 'today'" do
       Einstein.menu_for(:today).should include(*@today)
       a_request(:get, "http://www.butlercatering.se/einstein.html").should have_been_made.once
+    end
+    
+    it "should only contain plain text" do
+      @days.each do |day|
+        Einstein.menu_for(day).each do |dish|
+          dish.should_not match(/•/)
+        end
+      end
     end
   end
   

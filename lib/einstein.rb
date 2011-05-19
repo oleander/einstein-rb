@@ -17,7 +17,7 @@ class Einstein
   def menu_for(whenever)
     data = content.css("td.bg_lunchmeny p").to_a[1..-2].map do |p| 
       list = p.content.split("\r\n")
-      {list[0].gsub(/"|:|\s+/, "") => list[1..-1].map { |item| item.gsub(/• /, "").strip }}
+      {list[0].gsub(/"|:|\s+/, "") => list[1..-1].map { |item| item.gsub(/•/, "").strip }}
     end.inject({}) { |a, b| a.merge(b) }
     
     whenever = days.keys[Date.today.wday] if whenever == :today
