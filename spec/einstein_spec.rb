@@ -47,12 +47,12 @@ describe Einstein::Menu do
         description:  @monday.join(", ")
       })
       
-      Einstein::Menu.new(:monday).dishes.push_to(@api_key)
+      Einstein::Menu.new(:monday).push_to(@api_key)
     end
     
     it "should not push if #menu_for is empty" do
       Prowl.should_not_receive(:add)
-      Einstein::Menu.new(:sunday).dishes.push_to(@api_key)
+      Einstein::Menu.new(:sunday).push_to(@api_key)
     end
   end
 end
