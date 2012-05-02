@@ -62,7 +62,9 @@ end
 
 ## Requirements
 
-*Einstein* is tested in *OS X 10.6.7* using Ruby *1.9.2*.
+- [Tesseract](http://code.google.com/p/tesseract-ocr/)
+- [ImageMagick](http://www.imagemagick.org/script/index.php)
+- Ruby 1.9.2
 
 ## License
 
