@@ -12,41 +12,45 @@ module Einstein
   class Menu
     #
     # @whenever Symbol Day of the week
-    # @return Einstein::Container
     #
-    def self.menu_for(whenever)
-      Einstein::Menu.new.menu_for(whenever)
+    def initialize(whenever)
+      @whenever = whenever
     end
     
     #
-    # @whenever Symbol Day of the week
     # @return Einstein::Container
     #
-    def menu_for(whenever)
-      return nil unless image
-
-      if whenever == :today
-        whenever = Date.today.strftime("%A")
-      end
-
-      url = File.join("http://www.butlercatering.se", image.attr("src"))
-      tmpfile = File.join(Dir.mktmpdir, Digest::MD5.hexdigest(Time.now.to_f.to_s))
-      File.open(tmpfile, 'w') {|f| f.write(RestClient.get(url)) }
-      text = RTesseract.new(tmpfile).to_s
-
-      text.split("\n").
-        select{ |row| row.match(/^- /) }.
-        map { |row| row.gsub(/^- /, "") }.
-        each_slice(3).each_with_index do |dishes, i|
-          if days[i].match(/#{whenever.to_s}/i)
-            return Einstein::Container.new(dishes, days[i])
-          end
-        end
-
-      return Einstein::Container.new([], whenever)
+    def dishes
+      cached_dishes
     end
     
     private
+      def cached_dishes
+        @_cached_dishes ||= lambda {
+          return nil unless image
+
+          if @whenever == :today
+            @whenever = Date.today.strftime("%A")
+          end
+
+          url = File.join("http://www.butlercatering.se", image.attr("src"))
+          tmpfile = File.join(Dir.mktmpdir, Digest::MD5.hexdigest(Time.now.to_f.to_s))
+          File.open(tmpfile, 'w') {|f| f.write(RestClient.get(url)) }
+          text = RTesseract.new(tmpfile).to_s
+
+          text.split("\n").
+            select{ |row| row.match(/^- /) }.
+            map { |row| row.gsub(/^- /, "") }.
+            each_slice(3).each_with_index do |dishes, i|
+              if days[i].match(/#{@whenever.to_s}/i)
+                return Einstein::Container.new(dishes, days[i])
+              end
+            end
+
+          return Einstein::Container.new([], @whenever)
+        }.call
+      end
+
       def image
         @_image ||= lambda {
           raw = RestClient.get("http://www.butlercatering.se/Lunchmeny")

@@ -9,13 +9,13 @@ Follow me on [Twitter](http://twitter.com/linusoleander) or [Github](https://git
 ### Today's menu
 
 ```` ruby
-Einstein.menu_for(:today)
+Einstein::Menu.new(:today).dishes
 ````
 
 ### Menu for any day
 
 ```` ruby
-Einstein.menu_for(:monday)
+Einstein::Menu.new(:monday).dishes
 ````
 
 ### Push to phone
@@ -24,12 +24,12 @@ Einstein.menu_for(:monday)
 Just pass you [api key](https://www.prowlapp.com/api_settings.php) to `#push_to` and the menu will be push to you phone within seconds.
 
 ```` ruby
-Einstein.menu_for(:monday).push_to("6576aa9fa3fc3e18aca8da9914a166b3")
+Einstein::Menu.new(:monday).push_to("6576aa9fa3fc3e18aca8da9914a166b3")
 ````
 
-## What is being returned?
+## What's being returned?
 
-`#menu_for` returns an array of strings containing each dish for the given day.
+`#dishes` returns an array of strings containing each dish for the given day.
 
 ## What is being push to the phone?
 
@@ -48,8 +48,8 @@ It will push *today's menu* directly to your iPhone each day at 11:45 AM.
 require "rubygems"
 require "einstein"
 
-every 1.day, :at => "11:45 am" do 
-  runner 'Einstein.menu_for(:today).push_to("6576aa9fa3fc3e18aca8da9914a166b3")'
+every 1.day, at: "11:45 am" do 
+  runner 'Einstein::Menu.new(:today).push_to("6576aa9fa3fc3e18aca8da9914a166b3")'
 end
 ````
 
