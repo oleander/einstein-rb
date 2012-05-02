@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Linus Oleander"]
   s.email       = ["linus@oleander.nu"]
-  s.homepage    = "https://github.com/oleander/Einstein"
+  s.homepage    = "git@github.com:oleander/einstein-rb.git"
   s.summary     = %q{Push notification service for restaurant Einstein}
   s.description = %q{Push notification service for restaurant Einstein.}
 
