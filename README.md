@@ -45,7 +45,6 @@ It will push *today's menu* directly to your iPhone each day at 11:45 AM.
 3 . Add these lines to your `config/schedule.rb` file.  
 
 ```` ruby
-require "rubygems"
 require "einstein"
 
 every 1.day, at: "11:45 am" do 
