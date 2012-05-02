@@ -10,10 +10,18 @@ require "titleize"
 
 module Einstein  
   class Menu
+    #
+    # @whenever Symbol Day of the week
+    # @return Einstein::Container
+    #
     def self.menu_for(whenever)
       Einstein::Menu.new.menu_for(whenever)
     end
     
+    #
+    # @whenever Symbol Day of the week
+    # @return Einstein::Container
+    #
     def menu_for(whenever)
       return nil unless image
 
