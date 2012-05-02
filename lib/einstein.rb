@@ -1,49 +1,62 @@
-# -*- encoding : utf-8 -*-
-
 require "rest-client"
 require "nokogiri"
 require "prowl"
 require "einstein/container"
-require "titleize"
 require "date"
+require "rtesseract"
+require "nokogiri"
+require "digest/md5"
+require "titleize"
 
-class Einstein
-  include EinsteinContainer
-  
-  def self.method_missing(meth, *args, &blk)
-    Einstein.new.send(meth, *args, &blk)
+module Einstein  
+  class Menu
+    def self.menu_for(whenever)
+      Einstein::Menu.new.menu_for(whenever)
+    end
+    
+    def menu_for(whenever)
+      return nil unless image
+
+      if whenever == :today
+        whenever = Date.today.strftime("%A")
+      end
+
+      url = File.join("http://www.butlercatering.se", image.attr("src"))
+      tmpfile = File.join(Dir.mktmpdir, Digest::MD5.hexdigest(Time.now.to_f.to_s))
+      File.open(tmpfile, 'w') {|f| f.write(RestClient.get(url)) }
+      text = RTesseract.new(tmpfile).to_s
+
+      text.split("\n").
+        select{ |row| row.match(/^- /) }.
+        map { |row| row.gsub(/^- /, "") }.
+        each_slice(3).each_with_index do |dishes, i|
+          if days[i].match(/#{whenever.to_s}/i)
+            return Einstein::Container.new(dishes, days[i])
+          end
+        end
+
+      return Einstein::Container.new([], whenever)
+    end
+    
+    private
+      def image
+        @_image ||= lambda {
+          raw = RestClient.get("http://www.butlercatering.se/Lunchmeny")
+          image = Nokogiri::HTML(raw).
+            css("span img").select{ |img| img.attr("src").match(/uploads/) }.first
+        }.call
+      end
+      
+      def days
+        %w{
+          Monday
+          Tuesday
+          Wednesday
+          Thursday
+          Friday
+          Saturday
+          Sunday
+        }
+      end
   end
-  
-  def menu_for(whenever)
-    data = content.css("td.bg_lunchmeny p").to_a[1..-2].map do |p| 
-      list = p.content.split("\r\n")
-      {list[0].gsub(/"|:|\s+/, "") => list[1..-1].map { |item| item.gsub(/•/, "").strip }}
-    end.inject({}) { |a, b| a.merge(b) }
-    
-    whenever = days.keys[Date.today.wday] if whenever == :today
-    data = data[days[whenever]] || []    
-    
-    Container.new(data, whenever)
-  end
-  
-  private
-    def content
-      @_content ||= Nokogiri::HTML(download)
-    end
-    
-    def download
-      @_download ||= RestClient.get("http://www.butlercatering.se/einstein.html", timeout: 10)
-    end
-    
-    def days
-      @_days ||= {
-        sunday:    "Sön",
-        monday:    "Mån",
-        tuesday:   "Tis",
-        wednesday: "Ons",
-        thursday:  "Tors",
-        friday:    "Fre",
-        saturday:  "Lör"
-      }
-    end
 end

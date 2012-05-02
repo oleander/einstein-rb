@@ -1,10 +1,8 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "einstein/version"
-
 Gem::Specification.new do |s|
   s.name        = "einstein"
-  s.version     = Einstein::VERSION
+  s.version     = "0.0.2"
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Linus Oleander"]
   s.email       = ["linus@oleander.nu"]
@@ -23,10 +21,12 @@ Gem::Specification.new do |s|
   s.add_dependency("nokogiri")
   s.add_dependency("prowl")
   s.add_dependency("titleize")
-    
+  s.add_dependency("rtesseract")
+
   s.add_development_dependency("rspec")
   s.add_development_dependency("webmock")
-  s.add_development_dependency("vcr")
+  s.add_development_dependency("vcr", "2.1.0")
+  s.add_development_dependency("multi_json")
   
-  s.required_ruby_version = ">= 1.9.0"
+  s.required_ruby_version = ">= 1.9.2"
 end

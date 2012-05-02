@@ -1,4 +1,4 @@
-module EinsteinContainer
+module Einstein
   class Container < Array
     def initialize(*values, whenever)
       @whenever = whenever
