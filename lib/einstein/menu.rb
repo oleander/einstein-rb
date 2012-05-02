@@ -14,6 +14,9 @@ module Einstein
       cached_dishes
     end
 
+    #
+    # @api_key String Prowl API key
+    #
     def push_to(api_key)
       unless cached_dishes.empty?
         Prowl.add({
